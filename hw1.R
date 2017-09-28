@@ -17,7 +17,7 @@ for (i in 1:m) {
 rm(temp)
 #p = ncol(train)
 train <- matrix(unlist(train), ncol = 257, byrow = TRUE)
-train <- train[which(train[, 1] %in% c(2, 3)), ]
+train <- train[which(train[, 1] %in% c(2, 3)),]
 #y = train[, 1]
 #x = train[,-1]
 
@@ -36,9 +36,9 @@ knncv <- function(X, fs, k) {
   for (i in 1:length(k)) {
     for (j in 1:fs) {
       j_ind = which(ind == j)
-      train_X = X[-j_ind,-1]
+      train_X = X[-j_ind, -1]
       train_y = X[-j_ind, 1]
-      test_X = X[j_ind,-1]
+      test_X = X[j_ind, -1]
       test_y = X[j_ind, 1]
       test_yhat = knn(train_X, test_X, cl = factor(train_y), k = k[i])
       train_yhat = knn(train_X, train_X, cl = factor(train_y), k = k[i])
@@ -71,9 +71,9 @@ lscv <- function(X, fs) {
   
   for (j in 1:fs) {
     j_ind = which(ind == j)
-    train_X = X[-j_ind,-1]
+    train_X = X[-j_ind, -1]
     train_y = X[-j_ind, 1]
-    test_X = X[j_ind,-1]
+    test_X = X[j_ind, -1]
     test_y = X[j_ind, 1]
     
     ols = lm(train_y ~ train_X)
@@ -96,65 +96,65 @@ lscv <- function(X, fs) {
 }
 
 
-cobo<-function(X,k,r) {
-  m=nrow(X)
-  m1=floor(m * r)
-  m2= m - m1
-  ind = c(rep(0,m1),rep(1,m2))
+cobo <- function(X, k, r) {
+  m = nrow(X)
+  m1 = floor(m * r)
+  m2 = m - m1
+  ind = c(rep(0, m1), rep(1, m2))
   set.seed(123)
   ind = sample(ind)
-  train_X = X[which(ind == 0),-1]
+  train_X = X[which(ind == 0), -1]
   train_y = X[which(ind == 0), 1]
-  test_X = X[which(ind == 1), -1]
+  test_X = X[which(ind == 1),-1]
   test_y = X[which(ind == 1), 1]
   
-  test_yhat1<-knn(train_X, test_X, cl = factor(train_y), k = k)
-  lm1<-lm(train_y ~ train_X)
-  beta<-lm1$coefficients
-  test_yhat2<-beta[1] + test_X %*% beta[-1]
-  test_yhat2<- ifelse(test_yhat2>2.5,3,2)
-  ind<-which(test_yhat1 != test_y)
+  test_yhat1 <- knn(train_X, test_X, cl = factor(train_y), k = k)
+  lm1 <- lm(train_y ~ train_X)
+  beta <- lm1$coefficients
+  test_yhat2 <- beta[1] + test_X %*% beta[-1]
+  test_yhat2 <- ifelse(test_yhat2 > 2.5, 3, 2)
+  ind <- which(test_yhat1 != test_y)
   test_yhat1[ind] = test_yhat2[ind]
   cobo_error = mean(test_yhat1 != test_y)
   return(cobo_error)
 }
 
 
-knn_<-function(X,k,r) {
-  m=nrow(X)
-  m1=floor(m * r)
-  m2= m - m1
+knn_ <- function(X, k, r) {
+  m = nrow(X)
+  m1 = floor(m * r)
+  m2 = m - m1
   set.seed(123)
-  ind = c(rep(0,m1),rep(1,m2))
+  ind = c(rep(0, m1), rep(1, m2))
   ind = sample(ind)
-  train_X = X[which(ind == 0),-1]
+  train_X = X[which(ind == 0), -1]
   train_y = X[which(ind == 0), 1]
-  test_X = X[which(ind == 1), -1]
+  test_X = X[which(ind == 1),-1]
   test_y = X[which(ind == 1), 1]
   
-  test_yhat<-knn(train_X, test_X, cl = factor(train_y), k = k)
-  knn_error=mean(test_yhat != test_y)
+  test_yhat <- knn(train_X, test_X, cl = factor(train_y), k = k)
+  knn_error = mean(test_yhat != test_y)
   return(knn_error)
 }
 
 
-ls_<-function(X,r){
-  m=nrow(X)
-  m1=floor(m * r)
-  m2= m - m1
-  ind = c(rep(0,m1),rep(1,m2))
+ls_ <- function(X, r) {
+  m = nrow(X)
+  m1 = floor(m * r)
+  m2 = m - m1
+  ind = c(rep(0, m1), rep(1, m2))
   set.seed(123)
   ind = sample(ind)
-  train_X = X[which(ind == 0),-1]
+  train_X = X[which(ind == 0), -1]
   train_y = X[which(ind == 0), 1]
-  test_X = X[which(ind == 1), -1]
+  test_X = X[which(ind == 1),-1]
   test_y = X[which(ind == 1), 1]
   
-  lm1<-lm(train_y ~ train_X)
-  beta<-lm1$coefficients
-  test_yhat2<-beta[1] + test_X %*% beta[-1]
-  test_yhat2<- ifelse(test_yhat2>2.5,3,2)
-  ls_error=mean(test_yhat2 != test_y)
+  lm1 <- lm(train_y ~ train_X)
+  beta <- lm1$coefficients
+  test_yhat2 <- beta[1] + test_X %*% beta[-1]
+  test_yhat2 <- ifelse(test_yhat2 > 2.5, 3, 2)
+  ls_error = mean(test_yhat2 != test_y)
   return(ls_error)
 }
 ###############     CROSS-VALIDATION    #################
@@ -175,22 +175,25 @@ lsmse_summary <- lsmse %>%
 #FOR KNN ALGO, K = 5 HAS THE MIN TEST_ERROR
 
 ###############   MODEL      #################
-knn_(train,5,0.7)
-ls_(train,0.7)
-cobo(train,5,0.7)
+knn_(train, 5, 0.7)
+ls_(train, 0.7)
+cobo(train, 5, 0.7)
 
 ###############   PLOT      #################
-l=length(k)
-mat1<-matrix(k,l,1)
-v=unlist(rep(lsmse_summary,l))
-mat2<-matrix(v,l,2,byrow=TRUE)
-lsmse_summary2<-tbl_df(cbind(mat1,mat2))
-colnames(lsmse_summary2)<-c("X1","train_err","test_err")
+l = length(k)
+mat1 <- matrix(k, l, 1)
+v = unlist(rep(lsmse_summary, l))
+mat2 <- matrix(v, l, 2, byrow = TRUE)
+lsmse_summary2 <- tbl_df(cbind(mat1, mat2))
+colnames(lsmse_summary2) <- c("X1", "train_err", "test_err")
 
-knnmse_summary2<-gather(knnmse_summary,split,error,train_err:test_err,factor_key = TRUE)  
-lsmse_summary2<- gather(lsmse_summary2,split,error,train_err:test_err,factor_key = TRUE)
-plotdata<-bind_rows("knn" = knnmse_summary2, "ls" = lsmse_summary2, .id = "Algo") %>% 
-          mutate(group = paste(Algo, split, sep = ","))
-g1<-ggplot(data = plotdata, aes(y = error, x = X1 )) + 
-    geom_line(aes(group = group, colour = group)) +
-    xlab("K")
+knnmse_summary2 <-
+  gather(knnmse_summary, split, error, train_err:test_err, factor_key = TRUE)
+lsmse_summary2 <-
+  gather(lsmse_summary2, split, error, train_err:test_err, factor_key = TRUE)
+plotdata <-
+  bind_rows("knn" = knnmse_summary2, "ls" = lsmse_summary2, .id = "Algo") %>%
+  mutate(group = paste(Algo, split, sep = ","))
+g1 <- ggplot(data = plotdata, aes(y = error, x = X1)) +
+  geom_line(aes(group = group, colour = group)) +
+  xlab("K")
